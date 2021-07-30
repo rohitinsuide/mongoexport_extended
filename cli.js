@@ -25,4 +25,11 @@ const argv = yargs
         })
         .argv
 
-mongoExtend(argv.dbName);
+
+const escapeJSON = (jsObj) => {
+    return JSON.stringify(jsObj).replace(/\\n/g, "\\n").replace(/\\'/g, "\\'").replace(/\\"/g, '\\"').replace(/\\&/g, "\\&").replace(/\\r/g, "\\r").replace(/\\t/g, "\\t").replace(/\\b/g, "\\b").replace(/\\f/g, "\\f");
+};
+
+const query = escapeJSON(argv.query);
+
+mongoExtend(argv.dbName, query);
