@@ -28,9 +28,9 @@ const mongoExtend = (dbName) => {
                     }
                     if (stderr) {
                         console.log(stderr);
+                        console.log(`Exported file to ${fileName}`);
                         return;
                     }
-                    console.log(`Exported file to ${fileName}`);
                 });
             }
         }
