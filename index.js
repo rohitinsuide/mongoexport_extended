@@ -27,12 +27,10 @@ const mongoExtend = (dbName) => {
                         return;
                     }
                     if (stderr) {
-                        console.log(`Failed to execute due to stderr: ${stderr}`);
+                        console.log(stderr);
                         return;
                     }
-                    else{
-                        console.log(`Exported file to ${fileName}`);
-                    }
+                    console.log(`Exported file to ${fileName}`);
                 });
             }
         }
