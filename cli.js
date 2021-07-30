@@ -32,4 +32,4 @@ const escapeJSON = (jsObj) => {
 
 const query = escapeJSON(argv.query);
 
-mongoExtend(argv.dbName, query);
+mongoExtend(argv.dbName, argv.query);
