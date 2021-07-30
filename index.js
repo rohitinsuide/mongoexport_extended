@@ -1,6 +1,6 @@
 const { exec } = require("child_process");
 
-const mongoExtend = (dbName, query) => {
+const mongoExtend = (dbName, query, output='output') => {
 
     exec(`mongo ${dbName} --quiet --eval "db.getCollectionNames()"`, (error, collectionList, stderr) => {
         if (error) {
@@ -17,10 +17,10 @@ const mongoExtend = (dbName, query) => {
 
         if(collectionLen){
             console.log('Total number of collections :- ' + collectionLen);
-            exec('mkdir ./output');
+            exec(`mkdir ./${output}`);
             for(let i = 0; i < collectionList.length; i++){
                 const collection = collectionList[i];
-                const fileName = `./output/${collection}.json`;
+                const fileName = `./${output}/${collection}.json`;
                 exec(`mongoexport -d ${dbName} -c ${collection} --query ${query} --out ${fileName}`, (error, success, stderr) => {
                     if (error) {
                         console.log(`Failed to execute due to error: ${error.message}`);

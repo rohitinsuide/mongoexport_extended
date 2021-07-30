@@ -30,6 +30,8 @@ const escapeJSON = (jsObj) => {
     return JSON.stringify(jsObj).replace(/\\n/g, "\\n").replace(/\\'/g, "\\'").replace(/\\"/g, '\\"').replace(/\\&/g, "\\&").replace(/\\r/g, "\\r").replace(/\\t/g, "\\t").replace(/\\b/g, "\\b").replace(/\\f/g, "\\f");
 };
 
+const output = argv.output ? argv.output.replace(/\s/g, "X") : 'output';
+
 const query = escapeJSON(argv.query);
 
-mongoExtend(argv.dbName, query);
+mongoExtend(argv.dbName, query, output);
