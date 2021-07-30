@@ -21,7 +21,7 @@ const mongoExtend = (dbName) => {
             for(let i = 0; i < collectionList.length; i++){
                 const collection = collectionList[i];
                 const fileName = `./output/${collection}.json`;
-                exec(`mongoexport -d ${dbName} -c ${collection} --query {appname: {$eq: 'bud'}} --out ${fileName}`, (error, success, stderr) => {
+                exec(`mongoexport -d ${dbName} -c ${collection} --query '{"appname": "bud"}' --out ${fileName}`, (error, success, stderr) => {
                     if (error) {
                         console.log(`Failed to execute due to error: ${error.message}`);
                         return;
