@@ -1,6 +1,15 @@
+"use strict";
 const { exec } = require("child_process");
 
+const { existsSync, mkdirSync, readdirSync } = require('fs');
+
+
+
 const mongoExtend = (dbName, query, output='output') => {
+
+    if( ! existsSync(output) ){
+        mkdirSync(output)
+    }
 
     exec(`mongo ${dbName} --quiet --eval "db.getCollectionNames()"`, (error, collectionList, stderr) => {
         if (error) {
@@ -17,24 +26,23 @@ const mongoExtend = (dbName, query, output='output') => {
 
         if(collectionLen){
             console.log('Total number of collections :- ' + collectionLen);
-            exec(`mkdir ./${output}`);
+            
             for(let i = 0; i < collectionList.length; i++){
                 const collection = collectionList[i];
                 const fileName = `./${output}/${collection}.json`;
-                exec(`mongoexport -d ${dbName} -c ${collection} --query ${query} --out ${fileName}`, (error, success, stderr) => {
+                exec(`mongoexport -d ${dbName} -c ${collection} --query ${query} --out ${fileName} --jsonArray`, (error, success, stderr) => {
                     if (error) {
                         console.log(`Failed to execute due to error: ${error.message}`);
                         return;
                     }
                     if (stderr) {
                         console.log(stderr);
-                        console.log(`Exported file to ${fileName}`);
                         return;
                     }
+                    console.log(`Exported file to ${fileName}`);
                 });
             }
         }
-        //console.log(`stdout: ${collectionList}`);
 
         
     });
@@ -42,4 +50,33 @@ const mongoExtend = (dbName, query, output='output') => {
 
 }
 
-module.exports = mongoExtend;
+
+const importsExport = (dbName, input='output') => {
+
+    if( existsSync(input) ){
+        readdirSync(input).forEach(file=>{
+            if(file.includes('.json')){
+
+                const collection = file.split('.json')[0];
+                exec(`mongoimport -d ${dbName} -c ${collection} --file ./${input}/${file} --jsonArray`, (error, success, stderr) => {
+                    if (error) {
+                        console.log(`Failed to execute due to error: ${error.message}`);
+                        return;
+                    }
+                    if (stderr) {
+                        console.log(stderr);
+                        return;
+                    }
+                    console.log(`Imported file: ${file} to collection: ${collection} in DB: ${dbName}`);
+                });
+            }
+        });
+    }
+    else{
+        console.log('Specified directory doesn\'t exist. Please check the directory name and retry.');
+    }
+
+
+}
+
+module.exports = {mongoExtend, importsExport};
