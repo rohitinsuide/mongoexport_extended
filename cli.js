@@ -23,6 +23,11 @@ yargs
             alias: 'o',
             describe: 'Output directory name/location.',
             type: 'string'
+        },
+        uri: {
+            alias: 'u',
+            describe: 'URL/Hostname used to connect with external servers',
+            type: 'string'
         }
     },
     (argv) => {
@@ -49,13 +54,18 @@ yargs
             demandOption: true,
             describe: 'Directory where the exports happened',
             type: 'string'
+        },
+        uri: {
+            alias: 'u',
+            describe: 'URL/Hostname used to connect with external servers',
+            type: 'string'
         }
     },
     (argv) => {
 
         const input = argv.input ? argv.input.replace(/\s/g, "X") : 'output';
         importsExport(argv.dbName, input);
-        
+
     })
     .help()
     .argv

@@ -58,7 +58,7 @@ const importsExport = (dbName, input='output') => {
             if(file.includes('.json')){
 
                 const collection = file.split('.json')[0];
-                exec(`mongoimport -d ${dbName} -c ${collection} --file ./${input}/${file} --jsonArray`, (error, success, stderr) => {
+                exec(`mongoimport --uri mongodb://172.20.105.6:27017 -d ${dbName} -c ${collection} --file ./${input}/${file} --jsonArray`, (error, success, stderr) => {
                     if (error) {
                         console.log(`Failed to execute due to error: ${error.message}`);
                         return;
