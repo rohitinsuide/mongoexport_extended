@@ -63,8 +63,7 @@ yargs
     },
     (argv) => {
 
-        const input = argv.input ? argv.input.replace(/\s/g, "X") : 'output';
-        importsExport(argv.dbName, input);
+        importsExport(argv.dbName, argv.input);
 
     })
     .help()
